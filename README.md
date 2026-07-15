@@ -160,7 +160,6 @@ Response
 
 # Screenshots
 
-Replace these with your screenshots.
 
 <img src="preview/home.png">
 
