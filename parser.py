@@ -4,15 +4,24 @@ import json
 def parse_tool_call(response: str):
     try:
         tool_request = json.loads(response)
-        if(
-            isinstance(tool_request, dict)
-            and "tool" in tool_request
-        ):
-            return tool_request
+        
+        if not isinstance(tool_request, dict):
+            return None
+        
+        if "tool" not in tool_request:
+            return None
+        
+        if not isinstance(tool_request["tool"], str):
+            return None
+        return tool_request
+    
+    except json.JSONDecodeError:
+        return None
     
     except Exception:
-        pass
-    
+        pass 
+        return None
+
     return None
 
 if __name__ == "__main__":

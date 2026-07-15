@@ -23,45 +23,45 @@ FUNCTIONS = {
 }
 
 
-def calculator(expression: str):
+def execute(arguments: dict) -> str:
+    expression = arguments.get("expression", "") if isinstance(arguments, dict) else str(arguments)
     try:
         tree = ast.parse(expression, mode='eval')
         result = _evaluate(tree.body)
         return str(result)
     except Exception as e:
         return f"Calculation error: {e}"
-    
+
 
 def _evaluate(node):
-
     if isinstance(node, ast.Constant):
         return node.value
-    
+
     elif isinstance(node, ast.BinOp):
         return OPERATORS[type(node.op)](
             _evaluate(node.left),
             _evaluate(node.right)
         )
-    
+
     elif isinstance(node, ast.UnaryOp):
         return OPERATORS[type(node.op)](
             _evaluate(node.operand)
         )
-    
-    elif isinstance(node, ast.Call):
 
+    elif isinstance(node, ast.Call):
         if not isinstance(node.func, ast.Name):
             raise ValueError("Only named functions are allowed.")
-        
-        func_name = node.func.id
 
+        func_name = node.func.id
         if func_name not in FUNCTIONS:
             raise ValueError(f"Function '{func_name}' is not supported.")
-        
+
         args = [_evaluate(arg) for arg in node.args]
         return FUNCTIONS[func_name](*args)
-    raise ValueError(f"Unsupported expression")
+
+    raise ValueError("Unsupported expression")
+
 
 if __name__ == "__main__":
-    print(calculator("25*18"))
-    print(calculator("(45+15)/3"))
+    print(execute({"expression": "25*18"}))
+    print(execute({"expression": "(45+15)/3"}))

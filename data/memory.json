@@ -118,5 +118,117 @@
     {
         "role": "assistant",
         "content": "The result of 5-5 is 0."
+    },
+    {
+        "role": "user",
+        "content": "hello"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello!"
+    },
+    {
+        "role": "user",
+        "content": "hello"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello again!"
+    },
+    {
+        "role": "user",
+        "content": "Convert 50 USD to INR"
+    },
+    {
+        "role": "assistant",
+        "content": "50 USD is equal to 4812.00 INR."
+    },
+    {
+        "role": "user",
+        "content": "Who is Elon Musk?"
+    },
+    {
+        "role": "assistant",
+        "content": "{\n    \"tool\":\"wikipedia\",\n    \"topic\":\"Elon Musk\"\n}"
+    },
+    {
+        "role": "user",
+        "content": "Who is Elon Musk?"
+    },
+    {
+        "role": "assistant",
+        "content": "{\n    \"tool\":\"wikipedia\",\n    \"topic\":\"Elon Musk\"\n}"
+    },
+    {
+        "role": "user",
+        "content": "Who is Elon Musk?"
+    },
+    {
+        "role": "assistant",
+        "content": "Elon Musk is a business magnate and entrepreneur who has founded or co-founded companies like PayPal, SpaceX, Tesla, Neuralink, and The Boring Company. He is known for his ambitious goals, such as reducing global warming through sustainable energy and making humanity a multi-planetary species."
+    },
+    {
+        "role": "user",
+        "content": "who is elon musk"
+    },
+    {
+        "role": "assistant",
+        "content": "Elon Musk is a business magnate and entrepreneur who has founded or co-founded companies like PayPal, SpaceX, Tesla, Neuralink, and The Boring Company. He is known for his ambitious goals, such as reducing global warming through sustainable energy and making humanity a multi-planetary species."
+    },
+    {
+        "role": "user",
+        "content": "contvert 50 usd to inr"
+    },
+    {
+        "role": "assistant",
+        "content": "50 USD is equal to 4812.00 INR."
+    },
+    {
+        "role": "user",
+        "content": "convert 50 usd to inr"
+    },
+    {
+        "role": "assistant",
+        "content": "50 USD is equal to 4812.00 INR."
+    },
+    {
+        "role": "user",
+        "content": "who is elon musk"
+    },
+    {
+        "role": "assistant",
+        "content": "Elon Musk is a business magnate and entrepreneur who has founded or co-founded companies like PayPal, SpaceX, Tesla, Neuralink, and The Boring Company. He is known for his ambitious goals, such as reducing global warming through sustainable energy and making humanity a multi-planetary species."
+    },
+    {
+        "role": "user",
+        "content": "who is john sena"
+    },
+    {
+        "role": "assistant",
+        "content": "John Cena is an American professional wrestler, actor, television host, and former rapper. He is best known for his time in the WWE, where he won multiple championships and became one of the most popular and successful wrestlers of all time. He has also appeared in numerous films and television shows, and has become a successful actor and entertainer outside of the wrestling world."
+    },
+    {
+        "role": "user",
+        "content": "who is modi"
+    },
+    {
+        "role": "assistant",
+        "content": "Narendra Modi is the 14th and current Prime Minister of India. He has been in office since 2014 and is a member of the Bharatiya Janata Party (BJP). Before becoming Prime Minister, he served as the Chief Minister of Gujarat from 2001 to 2014. Modi is known for his economic development policies, his efforts to promote Hindu nationalism, and his strong leadership style. He has implemented various initiatives and programs aimed at improving the lives of Indians, such as the Swachh Bharat Abhiyan (Clean India Mission) and the Make in India program."
+    },
+    {
+        "role": "user",
+        "content": "convert to 60inr to usd"
+    },
+    {
+        "role": "assistant",
+        "content": "60 INR is equal to 0.62 USD."
+    },
+    {
+        "role": "user",
+        "content": "who is kumud rathi"
+    },
+    {
+        "role": "assistant",
+        "content": "I couldn't find any information on a person named Kumud Rathi. It's possible that the person is not a public figure or doesn't have a significant online presence. If you could provide more context or details about who Kumud Rathi is or what they are known for, I may be able to help you better."
     }
 ]
