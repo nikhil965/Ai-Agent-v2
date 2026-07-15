@@ -270,5 +270,37 @@
     {
         "role": "assistant",
         "content": "10 USD is equal to 962.40 INR."
+    },
+    {
+        "role": "user",
+        "content": "hellooo"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello!"
+    },
+    {
+        "role": "user",
+        "content": "gurgaon"
+    },
+    {
+        "role": "assistant",
+        "content": "Gurgaon, also known as Gurugram, is a city located in the state of Haryana, India. It is a major financial and industrial hub, and is part of the National Capital Region (NCR) of Delhi. Gurgaon is known for its modern infrastructure, shopping malls, and business parks, and is home to many multinational companies and startups."
+    },
+    {
+        "role": "user",
+        "content": "sohna"
+    },
+    {
+        "role": "assistant",
+        "content": "Sohna is a town located in the Gurgaon district of Haryana, India. It is situated about 24 kilometers south of Gurgaon city and is known for its natural hot springs, which are believed to have medicinal properties. Sohna is also a popular tourist destination, with attractions such as the Sohna Lake, the Damdama Lake, and the Aravalli Hills. The town is also home to several resorts, hotels, and spas, making it a popular weekend getaway for people from nearby cities."
+    },
+    {
+        "role": "user",
+        "content": "weather of sohna"
+    },
+    {
+        "role": "assistant",
+        "content": "The current weather in Sohna is mostly sunny with a temperature of 31.1°C and a wind speed of 4.7 km/h."
     }
 ]
