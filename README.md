@@ -33,6 +33,14 @@ Agentic AI is an autonomous AI assistant capable of understanding natural langua
 
 ---
 
+# Screenshots
+
+
+<img src="preview/home.png">
+
+<img src="preview/chat.png">
+---
+
 # Features
 
 | Status | Feature |
@@ -155,17 +163,6 @@ Response
   "response":"Current weather..."
 }
 ```
-
----
-
-# Screenshots
-
-
-<img src="preview/home.png">
-
-<img src="preview/chat.png">
-
----
 
 # Connect
 
