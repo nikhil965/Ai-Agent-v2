@@ -1,33 +1,44 @@
 import json
 import os
 
-# Vercel ka filesystem read-only hota hai, sirf /tmp writable hai.
-# Local pe data/ folder use hoga, Vercel pe /tmp
-if os.environ.get("VERCEL"):
-    MEMORY_FILE = "/tmp/memory.json"
-else:
-    MEMORY_FILE = "data/memory.json"
+PRIMARY_MEMORY_FILE = "data/memory.json"
+FALLBACK_MEMORY_FILE = "/tmp/memory.json"
+
+# Runtime pe decide karenge ki kaunsa path likhne layak hai
+MEMORY_FILE = PRIMARY_MEMORY_FILE
 
 
 def load_memory() -> list:
-    if not os.path.exists(MEMORY_FILE):
-        return []
-
-    try:
-        with open(MEMORY_FILE, "r", encoding="utf-8") as file:
-            return json.load(file)
-
-    except Exception:
-        return []
+    for path in (PRIMARY_MEMORY_FILE, FALLBACK_MEMORY_FILE):
+        if not os.path.exists(path):
+            continue
+        try:
+            with open(path, "r", encoding="utf-8") as file:
+                return json.load(file)
+        except Exception:
+            continue
+    return []
 
 
 def save_memory(memory: list) -> None:
-    folder = os.path.dirname(MEMORY_FILE)
-    if folder:
-        os.makedirs(folder, exist_ok=True)
+    global MEMORY_FILE
 
-    with open(MEMORY_FILE, "w", encoding="utf-8") as file:
+    # Pehle primary (data/memory.json) pe try karein
+    try:
+        folder = os.path.dirname(PRIMARY_MEMORY_FILE)
+        if folder:
+            os.makedirs(folder, exist_ok=True)
+        with open(PRIMARY_MEMORY_FILE, "w", encoding="utf-8") as file:
+            json.dump(memory, file, ensure_ascii=False, indent=4)
+        MEMORY_FILE = PRIMARY_MEMORY_FILE
+        return
+    except OSError:
+        pass
+
+    # Agar read-only filesystem hai (jaise Vercel), /tmp pe fallback karein
+    with open(FALLBACK_MEMORY_FILE, "w", encoding="utf-8") as file:
         json.dump(memory, file, ensure_ascii=False, indent=4)
+    MEMORY_FILE = FALLBACK_MEMORY_FILE
 
 
 def add_message(memory: list, role: str, content: str) -> None:
