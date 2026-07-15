@@ -230,5 +230,45 @@
     {
         "role": "assistant",
         "content": "I couldn't find any information on a person named Kumud Rathi. It's possible that the person is not a public figure or doesn't have a significant online presence. If you could provide more context or details about who Kumud Rathi is or what they are known for, I may be able to help you better."
+    },
+    {
+        "role": "user",
+        "content": "hello"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello!"
+    },
+    {
+        "role": "user",
+        "content": "what is my name"
+    },
+    {
+        "role": "assistant",
+        "content": "Your name is Shikhar."
+    },
+    {
+        "role": "user",
+        "content": "hello"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello!"
+    },
+    {
+        "role": "user",
+        "content": "my name is..?"
+    },
+    {
+        "role": "assistant",
+        "content": "Your name is Shikhar."
+    },
+    {
+        "role": "user",
+        "content": "10usd to inr...??"
+    },
+    {
+        "role": "assistant",
+        "content": "10 USD is equal to 962.40 INR."
     }
 ]
