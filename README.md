@@ -1,6 +1,6 @@
 <div align="center">
 
-# AGENTIC AI V-2
+# Ai Agent V-2
 
 ### Autonomous AI Agent powered by Groq Llama 3.3
 
