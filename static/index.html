@@ -2,44 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>AGENT // MISSION CONTROL</title>
+<title>GHOST // FIELD TERMINAL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@500;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Black+Ops+One&family=Space+Mono:wght@400;700&display=swap');
 
   :root{
-    --bg:#03060f;
-    --bg-panel:rgba(8,14,32,0.62);
-    --bg-panel-solid:#080e20;
-    --line:rgba(120,180,220,0.22);
-    --cyan:#5fe7ff;
-    --cyan-dim:#2c6a86;
-    --cyan-soft:rgba(95,231,255,0.09);
-    --violet:#a78bfa;
-    --amber:#ffb84d;
-    --rose:#ff6b81;
-    --text:#dcecfb;
-    --text-dim:#7691ab;
+    --bg:#000000;
+    --bg-panel:rgba(4,6,4,0.78);
+    --bg-panel-solid:#050604;
+    --line:rgba(90,120,80,0.28);
+    --grn:#3ef26a;
+    --grn-dim:#2a4a30;
+    --grn-soft:rgba(62,242,106,0.07);
+    --olive:#8a9a5b;
+    --amber:#e0a83c;
+    --rose:#e2483f;
+    --text:#c9d6c4;
+    --text-dim:#5c6a58;
   }
 
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; height:100%; background:var(--bg); overflow:hidden; }
   body{
-    font-family:'Space Mono', monospace;
+    font-family:'Share Tech Mono', monospace;
     color:var(--text);
   }
-  ::selection{ background:rgba(95,231,255,0.3); }
+  ::selection{ background:rgba(62,242,106,0.28); }
 
   /* ---------- background layers ---------- */
-  #stars{ position:fixed; inset:0; z-index:0; }
-  #stars canvas{ display:block; width:100%; height:100%; }
+  #grid{ position:fixed; inset:0; z-index:0; }
+  #grid canvas{ display:block; width:100%; height:100%; }
 
-  .nebula{
+  .noise-layer{
     position:fixed; inset:0; z-index:0;
     background:
-      radial-gradient(ellipse 55% 40% at 12% 8%, rgba(167,139,250,0.14), transparent 60%),
-      radial-gradient(ellipse 45% 35% at 92% 88%, rgba(95,231,255,0.10), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(44,106,134,0.10), transparent 70%);
+      radial-gradient(ellipse 60% 45% at 15% 10%, rgba(62,242,106,0.05), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 90% 90%, rgba(138,154,91,0.05), transparent 60%),
+      repeating-linear-gradient(90deg, rgba(62,242,106,0.015) 0px, rgba(62,242,106,0.015) 1px, transparent 1px, transparent 48px),
+      repeating-linear-gradient(0deg, rgba(62,242,106,0.015) 0px, rgba(62,242,106,0.015) 1px, transparent 1px, transparent 48px);
     pointer-events:none;
   }
 
@@ -47,18 +48,18 @@
     position:fixed; inset:0; z-index:5; pointer-events:none;
     background:repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,0.018) 0px,
-      rgba(255,255,255,0.018) 1px,
+      rgba(255,255,255,0.02) 0px,
+      rgba(255,255,255,0.02) 1px,
       transparent 1px,
       transparent 3px
     );
     mix-blend-mode:overlay;
-    opacity:0.5;
+    opacity:0.55;
   }
 
   .vignette{
     position:fixed; inset:0; z-index:4; pointer-events:none;
-    background:radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%);
+    background:radial-gradient(ellipse 120% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.8) 100%);
   }
 
   /* ---------- layout ---------- */
@@ -79,22 +80,22 @@
     padding:11px 18px;
     background:var(--bg-panel);
     backdrop-filter:blur(8px);
-    font-family:'Orbitron', sans-serif;
-    font-size:12px;
-    letter-spacing:2.5px;
-    color:var(--cyan-dim);
-    border-radius:8px 8px 0 0;
+    font-family:'Black Ops One', sans-serif;
+    font-size:13px;
+    letter-spacing:3px;
+    color:var(--grn-dim);
+    border-radius:2px 2px 0 0;
   }
   .titlebar .brand{
-    color:var(--cyan);
-    font-weight:700;
-    text-shadow:0 0 12px rgba(95,231,255,0.55);
+    color:var(--grn);
+    font-weight:400;
+    text-shadow:0 0 10px rgba(62,242,106,0.45);
     position:relative;
   }
   .titlebar .brand::after{
-    content:'✦ AGENT // MISSION CONTROL';
+    content:'▚ GHOST // FIELD TERMINAL';
     position:absolute; left:0; top:0;
-    color:var(--violet);
+    color:var(--amber);
     opacity:0;
     clip-path:inset(0 0 0 0);
     animation:glitch 7s infinite;
@@ -104,8 +105,8 @@
     97%{ opacity:0.7; transform:translate(-1.5px,0.5px); clip-path:inset(20% 0 60% 0); }
     98%{ opacity:0.5; transform:translate(1.5px,-0.5px); clip-path:inset(60% 0 10% 0); }
   }
-  .titlebar .status{ display:flex; align-items:center; gap:9px; color:var(--violet); }
-  .pulse{ width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan), 0 0 20px var(--cyan); animation:blink 1.8s infinite; }
+  .titlebar .status{ display:flex; align-items:center; gap:9px; color:var(--olive); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1px; }
+  .pulse{ width:8px; height:8px; border-radius:1px; background:var(--grn); box-shadow:0 0 8px var(--grn), 0 0 16px rgba(62,242,106,0.4); animation:blink 1.8s infinite; }
   @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
 
   .main{
@@ -114,9 +115,9 @@
     min-height:0;
     border:1px solid var(--line);
     border-top:none;
-    border-radius:0 0 8px 8px;
+    border-radius:0 0 2px 2px;
     overflow:hidden;
-    box-shadow:0 0 60px rgba(95,231,255,0.05) inset;
+    box-shadow:0 0 60px rgba(0,0,0,0.5) inset;
   }
 
   .term{
@@ -138,19 +139,19 @@
     line-height:1.75;
   }
   .log::-webkit-scrollbar{ width:8px; }
-  .log::-webkit-scrollbar-thumb{ background:var(--cyan-dim); border-radius:4px; }
+  .log::-webkit-scrollbar-thumb{ background:var(--grn-dim); border-radius:4px; }
   .log::-webkit-scrollbar-track{ background:transparent; }
 
   .line{ white-space:pre-wrap; word-break:break-word; margin-bottom:5px; opacity:0; animation:fadein 0.35s ease forwards; }
   @keyframes fadein{ from{ opacity:0; transform:translateY(3px); } to{ opacity:1; transform:translateY(0); } }
-  .tag{ color:var(--cyan-dim); }
+  .tag{ color:var(--grn-dim); }
   .you .tag{ color:var(--amber); }
   .agent{ color:var(--text); }
-  .agent .tag{ color:var(--cyan); text-shadow:0 0 6px rgba(95,231,255,0.5); }
-  .tool{ color:var(--violet); font-size:12.5px; padding-left:18px; opacity:0.8; }
+  .agent .tag{ color:var(--grn); text-shadow:0 0 6px rgba(62,242,106,0.4); }
+  .tool{ color:var(--olive); font-size:12.5px; padding-left:18px; opacity:0.85; }
   .tool .name{ color:var(--amber); }
   .err{ color:var(--rose); }
-  .boot{ color:var(--cyan-dim); }
+  .boot{ color:var(--grn-dim); }
 
   .inputbar{
     border-top:1px solid var(--line);
@@ -159,41 +160,41 @@
     padding:13px 18px;
     gap:10px;
   }
-  .prompt{ color:var(--amber); font-size:13.5px; white-space:nowrap; font-family:'Orbitron', sans-serif; }
+  .prompt{ color:var(--amber); font-size:13.5px; white-space:nowrap; font-family:'Black Ops One', sans-serif; }
   .inputbar input{
     flex:1;
-    background:var(--cyan-soft);
-    border:1px solid var(--cyan-dim);
-    border-radius:5px;
+    background:var(--grn-soft);
+    border:1px solid var(--grn-dim);
+    border-radius:2px;
     outline:none;
-    color:var(--cyan);
+    color:var(--grn);
     font-family:inherit;
     font-size:13.5px;
-    caret-color:var(--cyan);
+    caret-color:var(--grn);
     padding:9px 11px;
     transition:box-shadow 0.2s, border-color 0.2s;
   }
   .inputbar input:focus{
-    border-color:var(--cyan);
-    box-shadow:0 0 0 3px rgba(95,231,255,0.12), 0 0 16px rgba(95,231,255,0.15);
+    border-color:var(--grn);
+    box-shadow:0 0 0 3px rgba(62,242,106,0.12), 0 0 16px rgba(62,242,106,0.15);
   }
-  .inputbar input::placeholder{ color:rgba(95,231,255,0.32); }
+  .inputbar input::placeholder{ color:rgba(62,242,106,0.3); }
   .sendbtn{
-    background:linear-gradient(135deg, rgba(95,231,255,0.16), rgba(167,139,250,0.16));
-    border:1px solid var(--cyan);
-    color:var(--cyan);
-    font-family:'Orbitron', sans-serif;
+    background:linear-gradient(135deg, rgba(62,242,106,0.14), rgba(138,154,91,0.14));
+    border:1px solid var(--grn);
+    color:var(--grn);
+    font-family:'Black Ops One', sans-serif;
     font-size:11px;
     letter-spacing:1.5px;
     padding:10px 18px;
-    border-radius:5px;
+    border-radius:2px;
     cursor:pointer;
     transition:box-shadow 0.2s, transform 0.1s;
   }
-  .sendbtn:hover{ box-shadow:0 0 16px rgba(95,231,255,0.45); }
+  .sendbtn:hover{ box-shadow:0 0 16px rgba(62,242,106,0.45); }
   .sendbtn:active{ transform:scale(0.96); }
 
-  /* ---------- HUD side panel (signature element) ---------- */
+  /* ---------- HUD side panel ---------- */
   .hud{
     width:230px;
     flex-shrink:0;
@@ -205,7 +206,7 @@
     overflow-y:auto;
   }
   .hud-label{
-    font-family:'Orbitron', sans-serif;
+    font-family:'Black Ops One', sans-serif;
     font-size:9.5px;
     letter-spacing:2px;
     color:var(--text-dim);
@@ -216,9 +217,12 @@
     position:relative;
     width:100%;
     aspect-ratio:1;
-    border-radius:50%;
+    border-radius:2px;
     border:1px solid var(--line);
-    background:radial-gradient(circle, rgba(95,231,255,0.04) 0%, transparent 70%);
+    background:
+      repeating-linear-gradient(90deg, rgba(62,242,106,0.05) 0px, rgba(62,242,106,0.05) 1px, transparent 1px, transparent 14px),
+      repeating-linear-gradient(0deg, rgba(62,242,106,0.05) 0px, rgba(62,242,106,0.05) 1px, transparent 1px, transparent 14px),
+      radial-gradient(circle, rgba(62,242,106,0.05) 0%, transparent 70%);
     overflow:hidden;
   }
   .radar::before, .radar::after{
@@ -240,14 +244,14 @@
   .radar-sweep{
     position:absolute; inset:0;
     border-radius:50%;
-    background:conic-gradient(from 0deg, rgba(95,231,255,0.35), transparent 30%);
+    background:conic-gradient(from 0deg, rgba(62,242,106,0.32), transparent 30%);
     animation:sweep 4s linear infinite;
   }
   @keyframes sweep{ to{ transform:rotate(360deg); } }
   .blip{
     position:absolute;
     width:5px; height:5px;
-    border-radius:50%;
+    border-radius:1px;
     background:var(--amber);
     box-shadow:0 0 6px var(--amber);
     animation:blipfade 3s ease-in-out infinite;
@@ -256,18 +260,18 @@
 
   .telemetry{ display:flex; flex-direction:column; gap:10px; font-size:11.5px; }
   .tele-row{ display:flex; justify-content:space-between; color:var(--text-dim); }
-  .tele-row .val{ color:var(--cyan); }
+  .tele-row .val{ color:var(--grn); }
 
   .bars{ display:flex; gap:3px; align-items:flex-end; height:16px; }
   .bars span{
     width:4px;
-    background:var(--cyan-dim);
+    background:var(--grn-dim);
     border-radius:1px;
     animation:barwave 1.6s ease-in-out infinite;
   }
   .bars span:nth-child(1){ height:40%; animation-delay:0s; }
   .bars span:nth-child(2){ height:70%; animation-delay:0.15s; }
-  .bars span:nth-child(3){ height:100%; animation-delay:0.3s; background:var(--cyan); }
+  .bars span:nth-child(3){ height:100%; animation-delay:0.3s; background:var(--grn); }
   .bars span:nth-child(4){ height:65%; animation-delay:0.45s; }
   .bars span:nth-child(5){ height:30%; animation-delay:0.6s; }
   @keyframes barwave{ 0%,100%{ transform:scaleY(0.6); opacity:0.6; } 50%{ transform:scaleY(1); opacity:1; } }
@@ -276,17 +280,17 @@
 
   .memlog{ font-size:10.5px; color:var(--text-dim); display:flex; flex-direction:column; gap:5px; }
   .memlog .entry{ padding-left:10px; position:relative; }
-  .memlog .entry::before{ content:'·'; position:absolute; left:0; color:var(--cyan-dim); }
+  .memlog .entry::before{ content:'»'; position:absolute; left:0; color:var(--grn-dim); }
 
   .footer{
     position:relative; z-index:2;
     font-size:10px;
-    color:var(--cyan-dim);
+    color:var(--grn-dim);
     padding:9px 6px 0;
     display:flex;
     justify-content:space-between;
     letter-spacing:1px;
-    font-family:'Orbitron', sans-serif;
+    font-family:'Black Ops One', sans-serif;
   }
 
   @media (max-width: 720px){
@@ -299,16 +303,16 @@
 </style>
 </head>
 <body>
-<div id="stars"><canvas id="starsCanvas"></canvas></div>
-<div class="nebula"></div>
+<div id="grid"><canvas id="gridCanvas"></canvas></div>
+<div class="noise-layer"></div>
 <div class="scanlines"></div>
 <div class="vignette"></div>
 
 <div class="wrap">
 
   <div class="titlebar">
-    <div class="brand">✦ AGENT // MISSION CONTROL</div>
-    <div class="status"><span class="pulse"></span>ORBIT LOCKED</div>
+    <div class="brand">▚ GHOST // FIELD TERMINAL</div>
+    <div class="status"><span class="pulse"></span>SECURE LINK</div>
   </div>
 
   <div class="main">
@@ -316,14 +320,14 @@
       <div class="log" id="log"></div>
       <div class="inputbar">
         <span class="prompt">&gt;</span>
-        <input id="input" type="text" placeholder="transmit a message to the agent..." autocomplete="off" />
-        <button class="sendbtn" id="sendBtn">TRANSMIT</button>
+        <input id="input" type="text" placeholder="enter transmission..." autocomplete="off" />
+        <button class="sendbtn" id="sendBtn">SEND</button>
       </div>
     </div>
 
     <div class="hud">
       <div>
-        <div class="hud-label">CONTACT RADAR</div>
+        <div class="hud-label">SIGNAL INTERCEPT</div>
         <div class="radar">
           <div class="radar-cross"><span></span><span></span></div>
           <div class="radar-sweep"></div>
@@ -335,11 +339,11 @@
       <div class="divider"></div>
 
       <div>
-        <div class="hud-label">TELEMETRY</div>
+        <div class="hud-label">SYSTEM STATUS</div>
         <div class="telemetry">
           <div class="tele-row"><span>SIGNAL</span><span class="bars"><span></span><span></span><span></span><span></span><span></span></span></div>
           <div class="tele-row"><span>LATENCY</span><span class="val" id="latency">--ms</span></div>
-          <div class="tele-row"><span>MEM NODES</span><span class="val" id="memCount">0</span></div>
+          <div class="tele-row"><span>LOG NODES</span><span class="val" id="memCount">0</span></div>
           <div class="tele-row"><span>UPLINK</span><span class="val" id="uplinkState">IDLE</span></div>
         </div>
       </div>
@@ -347,7 +351,7 @@
       <div class="divider"></div>
 
       <div>
-        <div class="hud-label">RECENT TRANSMISSIONS</div>
+        <div class="hud-label">COMMS LOG</div>
         <div class="memlog" id="memlog">
           <div class="entry">awaiting first contact</div>
         </div>
@@ -356,18 +360,18 @@
   </div>
 
   <div class="footer">
-    <span id="endpointLabel">SIGNAL: /chat</span>
+    <span id="endpointLabel">CHANNEL: /chat</span>
     <span id="clock"></span>
   </div>
 
 </div>
 
 <script>
-// starfield background — two depth layers with drift + occasional shooting star
+// tactical grid background — faint scan sweep, no starfield
 (function(){
-  const canvas = document.getElementById('starsCanvas');
+  const canvas = document.getElementById('gridCanvas');
   const ctx = canvas.getContext('2d');
-  let w, h, stars = [], shooting = [];
+  let w, h, t = 0;
 
   function resize(){
     w = canvas.width = window.innerWidth;
@@ -376,50 +380,18 @@
   window.addEventListener('resize', resize);
   resize();
 
-  for(let i=0;i<200;i++){
-    stars.push({
-      x: Math.random()*w,
-      y: Math.random()*h,
-      r: Math.random()*1.4 + 0.3,
-      s: Math.random()*0.4 + 0.1,
-      tw: Math.random()*Math.PI*2
-    });
-  }
-
-  function maybeSpawnShootingStar(){
-    if(Math.random() < 0.0035 && shooting.length < 2){
-      const x = Math.random()*w*0.6;
-      shooting.push({ x, y: Math.random()*h*0.3, vx: 6+Math.random()*4, vy: 3+Math.random()*2, life: 1 });
-    }
-  }
-
   function draw(){
     ctx.clearRect(0,0,w,h);
-    for(const st of stars){
-      st.tw += 0.02;
-      const alpha = 0.35 + Math.sin(st.tw)*0.4;
-      ctx.beginPath();
-      ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(220,236,251,${alpha})`;
-      ctx.fill();
-      st.y += st.s;
-      if(st.y > h){ st.y = 0; st.x = Math.random()*w; }
-    }
+    t += 0.6;
 
-    maybeSpawnShootingStar();
-    shooting.forEach(sh=>{
-      ctx.beginPath();
-      const grad = ctx.createLinearGradient(sh.x, sh.y, sh.x - sh.vx*8, sh.y - sh.vy*8);
-      grad.addColorStop(0, `rgba(95,231,255,${sh.life})`);
-      grad.addColorStop(1, 'rgba(95,231,255,0)');
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.4;
-      ctx.moveTo(sh.x, sh.y);
-      ctx.lineTo(sh.x - sh.vx*8, sh.y - sh.vy*8);
-      ctx.stroke();
-      sh.x += sh.vx; sh.y += sh.vy; sh.life -= 0.02;
-    });
-    shooting = shooting.filter(sh => sh.life > 0 && sh.x < w+50 && sh.y < h+50);
+    // slow horizontal scan band
+    const bandY = (t % (h + 200)) - 100;
+    const grad = ctx.createLinearGradient(0, bandY - 60, 0, bandY + 60);
+    grad.addColorStop(0, 'rgba(62,242,106,0)');
+    grad.addColorStop(0.5, 'rgba(62,242,106,0.035)');
+    grad.addColorStop(1, 'rgba(62,242,106,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, bandY - 60, w, 120);
 
     requestAnimationFrame(draw);
   }
@@ -453,10 +425,10 @@ function appendLine(html){
 }
 
 function you(text){
-  appendLine(`<span class="you"><span class="tag">[${ts()}] COMMANDER ~$</span> ${escapeHtml(text)}</span>`);
+  appendLine(`<span class="you"><span class="tag">[${ts()}] OPERATOR ~$</span> ${escapeHtml(text)}</span>`);
 }
 function agent(text){
-  appendLine(`<span class="agent"><span class="tag">[${ts()}] AGENT ~$</span> ${escapeHtml(text)}</span>`);
+  appendLine(`<span class="agent"><span class="tag">[${ts()}] GHOST ~$</span> ${escapeHtml(text)}</span>`);
 }
 function toolStep(name, detail){
   appendLine(`<span class="tool">  ↳ <span class="name">${escapeHtml(name)}</span>${detail ? ' :: ' + escapeHtml(detail) : ''}</span>`);
@@ -485,13 +457,13 @@ function logMemEntry(text){
 }
 
 const bootLines = [
-  "⟡ initializing propulsion core ...",
-  "⟡ loading config.py ................ OK",
-  "⟡ loading memory.py ................ OK",
-  "⟡ loading tools.py .................. OK",
-  "⟡ loading prompts.py ................ OK",
-  "⟡ syncing llm backend .............. OK",
-  "⟡ launching agent.py ................ OK",
+  "▚ establishing secure channel ...",
+  "▚ loading config.py ................ OK",
+  "▚ loading memory.py ................ OK",
+  "▚ loading tools.py .................. OK",
+  "▚ loading prompts.py ................ OK",
+  "▚ syncing llm backend .............. OK",
+  "▚ launching agent.py ................ OK",
   ""
 ];
 
@@ -500,7 +472,7 @@ async function boot(){
     appendLine(`<span class="boot">${l}</span>`);
     await sleep(90);
   }
-  agent("systems nominal. transmit your message, commander.");
+  agent("systems nominal. standing by, operator.");
 }
 function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
@@ -541,7 +513,7 @@ async function sendMessage(){
     }
     agent(data.response || data.output || raw || "(empty response)");
     uplinkStateEl.textContent = "IDLE";
-    uplinkStateEl.style.color = "var(--cyan)";
+    uplinkStateEl.style.color = "var(--grn)";
 
   } catch(err){
     latencyEl.textContent = "--ms";
@@ -563,7 +535,7 @@ sendBtn.addEventListener('click', sendMessage);
 input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') sendMessage(); });
 
 function tickClock(){
-  clock.textContent = new Date().toTimeString().slice(0,8) + " :: SECTOR " + (100 + Math.floor(Math.random()*900));
+  clock.textContent = new Date().toTimeString().slice(0,8) + " :: GRID " + (100 + Math.floor(Math.random()*900));
 }
 setInterval(tickClock, 1000);
 tickClock();
