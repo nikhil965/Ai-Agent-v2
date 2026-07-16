@@ -1,99 +1,81 @@
-from llm import chat
-from memory import load_memory, save_memory
-from prompts import SYSTEM_PROMPT
-from parser import parse_tool_call
-from tools.registry import execute_tool
+import sys
+import traceback
+from flask import Flask, request, jsonify, send_from_directory
+
+from agent import Agent
+from config import API_KEY
+
+app = Flask(__name__, static_folder="static", static_url_path="")
+
+agent = Agent()
 
 
-class Agent:
+@app.route("/")
+def index():
+    return send_from_directory(app.static_folder, "index.html")
 
-    def run(self, user_input):
 
-        memory = load_memory()
+@app.route("/health")
+def health():
+    return jsonify({
+        "status": "ok",
+        "api_key_exists": API_KEY is not None
+    })
 
-        messages = [
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT
-            }
-        ]
 
-        messages.extend(memory)
+@app.route("/chat", methods=["POST"])
+def chat():
+    try:
+        data = request.get_json(force=True)
 
-        messages.append({
-            "role": "user",
-            "content": user_input
+        user_input = data.get("message", "").strip()
+
+        if not user_input:
+            return jsonify({
+                "success": False,
+                "error": "Empty message"
+            }), 400
+
+        response = agent.run(user_input)
+
+        return jsonify({
+            "success": True,
+            "response": response
         })
 
-        llm_response = chat(messages)
+    except Exception as e:
+        traceback.print_exc()
 
-        tool_request = parse_tool_call(llm_response)
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }), 500
 
-        if tool_request is None:
 
-            memory.append({
-                "role": "user",
-                "content": user_input
-            })
+def run_cli():
+    print("=" * 60)
+    print("AI Agent")
+    print("=" * 60)
 
-            memory.append({
-                "role": "assistant",
-                "content": llm_response
-            })
+    cli_agent = Agent()
 
-            save_memory(memory)
-
-            return llm_response
-
-        print("Tool requested")
-
-        tool_name = tool_request.get("tool")
-        arguments = tool_request.copy()
-        arguments.pop("tool", None)
-
-        print(f"\nTool_requested: {tool_name}")
-        print(f"Arguments: {arguments}")
-
-        # yeh line missing thi — tool ko actually call karna zaroori hai
-        tool_result = execute_tool(tool_name, arguments)
-
-        print(f"Tool Result: {tool_result}")
-
-        messages.append({
-            "role": "assistant",
-            "content": llm_response
-        })
-
-        messages.append({
-            "role": "user",
-            "content":
-            f"""
-            Tool Result: {tool_result}
-            Using this result answer the user's original question:
-            """
-        })
-
-        final_response = chat(messages)
-
-        memory.append({
-            "role": "user",
-            "content": user_input
-        })
-
-        memory.append({
-            "role": "assistant",
-            "content": final_response
-        })
-
-        save_memory(memory)
-
-        return final_response
-    
-if __name__ == "__main__":
-    agent = Agent()
     while True:
-        user_input = input("You: ")
+        user_input = input("You: ").strip()
+
         if user_input.lower() in ["exit", "quit"]:
             break
-        response = agent.run(user_input)
-        print(f"Bot: {response}")
+
+        try:
+            response = cli_agent.run(user_input)
+            print(f"Bot: {response}")
+
+        except Exception:
+            traceback.print_exc()
+
+
+if __name__ == "__main__":
+    if "--cli" in sys.argv:
+        run_cli()
+    else:
+        app.run(host="0.0.0.0", port=5000, debug=True)
