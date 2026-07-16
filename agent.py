@@ -1,81 +1,90 @@
-import sys
-import traceback
-from flask import Flask, request, jsonify, send_from_directory
+from llm import chat
+from memory import load_memory, save_memory
+from prompts import SYSTEM_PROMPT
+from parser import parse_tool_call
+from tools.registry import execute_tool
 
-from agent import Agent
-from config import API_KEY
-
-app = Flask(__name__, static_folder="static", static_url_path="")
-
-agent = Agent()
+MAX_TOOL_STEPS = 4  # safety limit so the agent can't loop forever
 
 
-@app.route("/")
-def index():
-    return send_from_directory(app.static_folder, "index.html")
+class Agent:
+    def run(self, user_input):
+        memory = load_memory()
 
-
-@app.route("/health")
-def health():
-    return jsonify({
-        "status": "ok",
-        "api_key_exists": API_KEY is not None
-    })
-
-
-@app.route("/chat", methods=["POST"])
-def chat():
-    try:
-        data = request.get_json(force=True)
-
-        user_input = data.get("message", "").strip()
-
-        if not user_input:
-            return jsonify({
-                "success": False,
-                "error": "Empty message"
-            }), 400
-
-        response = agent.run(user_input)
-
-        return jsonify({
-            "success": True,
-            "response": response
+        messages = [
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT
+            }
+        ]
+        messages.extend(memory)
+        messages.append({
+            "role": "user",
+            "content": user_input
         })
 
-    except Exception as e:
-        traceback.print_exc()
+        llm_response = chat(messages)
 
-        return jsonify({
-            "success": False,
-            "error": str(e),
-            "traceback": traceback.format_exc()
-        }), 500
+        steps_taken = 0
 
+        # Keep going as long as the model keeps requesting tools,
+        # up to MAX_TOOL_STEPS times (prevents infinite loops).
+        while steps_taken < MAX_TOOL_STEPS:
+            tool_request = parse_tool_call(llm_response)
 
-def run_cli():
-    print("=" * 60)
-    print("AI Agent")
-    print("=" * 60)
+            if tool_request is None:
+                # Model gave a final plain-text answer — we're done.
+                break
 
-    cli_agent = Agent()
+            steps_taken += 1
 
-    while True:
-        user_input = input("You: ").strip()
+            tool_name = tool_request.get("tool")
+            arguments = tool_request.copy()
+            arguments.pop("tool", None)
 
-        if user_input.lower() in ["exit", "quit"]:
-            break
+            print(f"\nTool_requested: {tool_name}")
+            print(f"Arguments: {arguments}")
 
-        try:
-            response = cli_agent.run(user_input)
-            print(f"Bot: {response}")
+            tool_result = execute_tool(tool_name, arguments)
+            print(f"Tool Result: {tool_result}")
 
-        except Exception:
-            traceback.print_exc()
+            messages.append({
+                "role": "assistant",
+                "content": llm_response
+            })
+            messages.append({
+                "role": "user",
+                "content": (
+                    f"Tool Result: {tool_result}\n"
+                    "If this result answers the user's original question, "
+                    "reply with a normal plain-text answer now. "
+                    "If it does not (for example the tool found nothing), "
+                    "you may request ONE more tool call in the same JSON "
+                    "format to try a different approach (e.g. web_search)."
+                )
+            })
+
+            llm_response = chat(messages)
+
+        # llm_response is now the final natural-language answer
+        memory.append({
+            "role": "user",
+            "content": user_input
+        })
+        memory.append({
+            "role": "assistant",
+            "content": llm_response
+        })
+        save_memory(memory)
+
+        return llm_response
 
 
 if __name__ == "__main__":
-    if "--cli" in sys.argv:
-        run_cli()
-    else:
-        app.run(host="0.0.0.0", port=5000, debug=True)
+    agent = Agent()
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() in ["exit", "quit"]:
+            break
+        response = agent.run(user_input)
+        print(f"Bot: {response}")
